@@ -60,7 +60,7 @@ do
    rm -rf ${tempdir}*.tmp
    rm -rf ${tempdir2}*.tmp
 
-   echo "Currently plotting number ${i} of 2 and started on ${dt}." |tee -a ${log}/${dt}_plot-${i}.log
+   echo "Currently plotting number ${i} of ${count} and started on ${dt}." |tee -a ${log}/${dt}_plot-${i}.log
    ./chia-plotter/build/chia_plot \
    -r ${threads} \
    -u ${buckets} \
