@@ -2,7 +2,7 @@
 Bash script for running the MadMax chia_plot tool with selecting available destination drive.
 Make sure you have access to the file: `chmod 755 plot_loop.sh`
 
-Set all the variables under `# Variables` section. The following are the variables that require setting:
+**Set all the variables under `# Variables` section.** The following are the variables that require setting:
 ```
 threads=4
 buckets=256
@@ -22,8 +22,7 @@ declare -a final_dest=(
 max=95%
 farm_folder=farm/ # disk_space check only works with mount points.
 ```
-More dest folders can get added. Add dest3=<path>,etc, then add it to the array `final_dest`.
+More dest folders can get added. Add dest3=/mount/point,etc, then add it to the array `final_dest`. As noted, the disk space check with `df` only returns usage with mount points and not  directly to folders. That is why the `farm_folder` variable exists.
 
 One arg is available to pass into the script. The arg is for how many times you want to run the script.
-Example: `./plot_loop.sh 3` will run the script three times consecutively.` The default is 2 consecutive runs.
-
+Example: `./plot_loop.sh 3` will run the script three times consecutively. The default is 2 consecutive runs.
