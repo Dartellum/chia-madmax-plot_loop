@@ -9,7 +9,7 @@ then
 else
   count=2 # $1 was not given
 fi
-echo "count is $count."
+
 threads=4
 buckets=256
 buckets3=${buckets}
@@ -36,10 +36,10 @@ disk_space () {
      if [ ${used%?} -ge ${max%?} ];
      then
        dest=”” # In case it was set on a run and now is not valid.
-       echo "The Mount Point ${j} on $(hostname) has used ${used} at $1." |tee -a ${log}/${1}_plot-${2}.log;
+       echo "The Mount Point ${j} on $(hostname) has used ${used} at ${1}." |tee -a ${log}/${1}_plot-${2}.log;
      else
        dest=${j}/${farm_folder};
-       echo "New Mount Point is $dest." |tee -a ${log}/${1}_plot-${2}.log;
+       echo "New Mount Point is ${dest}." |tee -a ${log}/${1}_plot-${2}.log;
        break;
      fi
   done
@@ -73,5 +73,5 @@ do
    -f ${farm} \
    -G ${tmptoggle} \
    |tee -a ${log}/${dt}_plot-${i}.log
-   echo "Time plot $i finished is $(date '+%H:%M:%S')." |tee -a ${log}/${dt}_plot-${i}.log
+   echo "Time plot ${i} finished is $(date '+%H:%M:%S')." |tee -a ${log}/${dt}_plot-${i}.log
 done
