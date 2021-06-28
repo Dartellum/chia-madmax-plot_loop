@@ -73,5 +73,5 @@ do
    -f ${farm} \
    -G ${tmptoggle} \
    |tee -a ${log}/${dt}_plot-${i}.log
-   echo "Time plot ${i} finished is $(date '+%H:%M:%S')." |tee -a ${log}/${dt}_plot-${i}.log
+   echo "Time plot ${i} finished is $(date '+%Y-%m-%d_+%H:%M:%S')." |tee -a ${log}/${dt}_plot-${i}.log
 done
