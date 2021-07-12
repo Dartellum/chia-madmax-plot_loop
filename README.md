@@ -32,4 +32,7 @@ More dest folders can get added. Add dest3=/mount/point,etc, then add it to the 
 One arg is available to pass into the script. The arg is for how many times you want to run the script.
 Example: `./plot_loop.sh 3` will run the script three times consecutively. The default is 2 consecutive runs.
 
+~~Example of move_plot.sh running on 10 minute interval.~~
+`*/10 * * * * /home/chia/move_plot.sh >> /home/chia/chialogs/move/move.log 2>&1`
+
 *** TODO: Way to mimick the `-G` swap each run.
