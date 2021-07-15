@@ -33,7 +33,7 @@ Discord=false
 url=(Your web hook here)
 
 discord_message () {
-  json_payload=$(jq -nc --arg message "$message" '
+  json_payload=$(jq -nc --arg message "${message}" '
      {
        "content" : "\($message)"
      }')
@@ -56,7 +56,7 @@ disk_space () {
        echo "The Mount Point ${j} on ${HOSTNAME} has used ${used} at ${1}." |tee -a ${log}/${1}_plot-${2}.log;
      else
        dest=${j}/${farm_folder};
-       echo "New Mount Point is ${dest}." |tee -a ${log}/${1}_plot-${2}.log;
+       echo "New Mount Point on ${HOSTNAME} is ${dest}." |tee -a ${log}/${1}_plot-${2}.log;
        break;
      fi
   done
@@ -72,7 +72,7 @@ do
    dt=$(date '+%Y-%m-%d_%H_%M_%S');
    disk_space ${dt} ${i}
    if [[ -z $dest ]]; then
-     echo "No drive space found on {HOSTNAME} for final destination!" |tee -a ${log}/${dt}_plot-${i}.log;
+     echo "No drive space found on ${HOSTNAME} for final destination!" |tee -a ${log}/${dt}_plot-${i}.log;
      exit
    fi
 
