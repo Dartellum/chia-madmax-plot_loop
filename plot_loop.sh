@@ -23,9 +23,11 @@ rmulti2=1
 log=/home/chia/chialogs
 dest1=/media/plots-02
 dest2=/media/plots-03
+mergerfschiapool=/media/chia
 declare -a final_dest=(
                        "${dest1}"
                        "${dest2}"
+                       #"${mergerfschiapool}"
                       )
 max=95%
 farm_folder=farm/ # disk_space check only works with mount points.
@@ -46,6 +48,7 @@ discord_message () {
 }
 
 disk_space () {
+
    # Check drive space on dest
   for j in "${final_dest[@]}"
   do
@@ -63,6 +66,7 @@ disk_space () {
   if [ "${Discord}" = true ]; then
      message="Final destination for ${HOSTNAME} is set to: ${dest}. If blank, no usable space found."
      discord_message ${message}
+  fi
 }
 
 # Main run loop
