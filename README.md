@@ -15,6 +15,7 @@ pool=
 farm=
 pool_contract_puzzle_hash=
 tmptoggle=false
+rmulti2=1
 log=/home/chia/chialogs
 dest1=/media/plots-02
 dest2=/media/plots-03
