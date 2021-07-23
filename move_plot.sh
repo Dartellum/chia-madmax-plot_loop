@@ -26,12 +26,12 @@ discord_message () {
 }
 
 if [ "${remove_solo_plots}" = true ]; then
-  if [ -e delete_solo_plot.log ];
+  if [ -e delete_solo_plot.log ]; then
     break
   else
     find ${DESTINATION_DIR} -name "*.plot" -type f -mtime ${days_to_collect_list} > delete-old-plots.log
     # Make a list that will not change as this process runs
-    cp delete_solo_plots.log master-list.log
+    cp delete-old-plots.log master-list.log
     if [ "${Discord}" = true ]; then
       message="List of solo plots to remove on ${HOSTNAME} generated."
       discord_message $message
