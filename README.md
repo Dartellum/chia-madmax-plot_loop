@@ -2,7 +2,7 @@
 Bash script for running the MadMax chia_plot tool with selecting available destination drive.
 Added optional Discord notification. Requires jq installed, `sudo apt install jq`.
 Make sure you have access to the file: `chmod 755 plot_loop.sh`
-Removed `-d ${dest}` from `chia-plotter` variables. Switched to using `mv` in a cron job, see `move_plot.sh`. The function will still check the dest space, log, and exit if none found.
+Removed `-d ${dest}` from `chia-plotter` variables. Switched to using `rsync` in a cron job, see `move_plot.sh`. The function will still check the destination space, log, and exit if not enough space is found.
 
 **Set all the variables under `# Variables` section.** The following are the variables that require setting:
 ```
@@ -32,6 +32,19 @@ More dest folders can get added. Add dest3=/mount/point,etc, then add it to the 
 
 One arg is available to pass into the script. The arg is for how many times you want to run the script.
 Example: `./plot_loop.sh 3` will run the script three times consecutively. The default is 2 consecutive runs.
+
+**move_plot variables that need set**
+SOURCE_DIR=/media/tempdir
+DESTINATION_DIR=/media/chia/farm
+Discord=true
+url="https://discord.com/api/webhooks/yourhook"
+###### Section for settings to removing existing sole plots based on time stamp
+remove_solo_plots=false
+###### Set this to the number of days in the past to collect the list of plots.
+###### Example, last solo plot was 16 days ago and now pool plots are generated. The +15 will
+###### grab the files dated 15 days from the run time of this move. This list is now set and will
+###### not collect again unless the file delete-old-plots.log is renamed or deleted.
+days_to_collect_list=+15
 
 **Example of move_plot.sh running on 10 minute interval.**
 `*/10 * * * * /home/chia/move_plot.sh >> /home/chia/chialogs/move/move.log 2>&1`
