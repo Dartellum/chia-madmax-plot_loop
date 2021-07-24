@@ -25,6 +25,7 @@ declare -a final_dest=(
                        "${dest8}"
                        "${dest9}"
                        "${dest10}"
+                       #"${mergerfschiapool}"
                       )
 ###### Section for settings to removing existing sole plots based on time stamp
 remove_solo_plots=false
@@ -92,7 +93,7 @@ if [ "${remove_solo_plots}" = true ]; then
 fi
 
 if [[ ( -n $plot ) ]]; then
-  if [ -e /media/tempdir/movingfiles.lock ]; then
+  if [ -e ${SOURCE_DIR}/movingfiles.lock ]; then
      echo "Move job already running...exiting"
      exit
   fi
