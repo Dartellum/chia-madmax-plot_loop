@@ -27,6 +27,9 @@ declare -a final_dest=(
                        "${dest10}"
                        #"${mergerfschiapool}"
                       )
+# If your final location for farming is not the root of the drive, put folder with trailing slash
+# here. Example: farm/. Does need trailing slash. If no directory, leave the blank.
+farm_folder=
 ###### Section for settings to removing existing sole plots based on time stamp
 remove_solo_plots=false
 ###### Set this to the number of days in the past to collect the list of plots.
@@ -59,7 +62,7 @@ disk_space () {
        dest='' # In case it was set on a run and now is not valid.
        echo "The Mount Point ${j} on ${HOSTNAME} has used ${used}."
      else
-       dest=${j}/;
+       dest=${j}/${farm_folder};
        echo "New Mount Point on ${HOSTNAME} is ${dest}."
        break;
      fi
@@ -82,9 +85,10 @@ if [ "${remove_solo_plots}" = true ]; then
   if [ -e delete-old-plots-${dest}.log ]; then
     break
   else
-    find ${dest} -name "*.plot" -type f -mtime ${days_to_collect_list} > delete-old-plots-${dest}.log
+    folder=$(echo ${dest} | sed 's/\(.*\)\/\(.*\)\/\(.*\)$/\2/')
+    find ${dest} -name "*.plot" -type f -mtime ${days_to_collect_list} > delete-old-plots-${folder}.log
     # Make a list that will not change as this process runs
-    cp delete-old-plots-${dest}.log master-list-${dest}.log
+    cp delete-old-plots-${folder}.log master-list-${folder}.log
     if [ "${Discord}" = true ]; then
       message="List of solo plots to remove on ${HOSTNAME} generated."
       discord_message $message
@@ -126,7 +130,7 @@ if [[ ( -n $plot ) ]]; then
         discord_message $message
       fi
       ### This command removes the first line from the file.
-      sed -i '1d' delete-old-plots-${dest}.log
+      sed -i '1d' delete-old-plots-${folder}.log
     fi
   done
 
@@ -139,3 +143,7 @@ if [[ ( -n $plot ) ]]; then
     discord_message ${message}
   fi
 fi
+
+#UNSET section
+unset folder
+unset message
