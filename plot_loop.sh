@@ -13,24 +13,42 @@ fi
 threads=4
 buckets=256
 buckets3=${buckets}
-tempdir=/media/plots-02/temp/
-tempdir2=/media/plots/temp/
+tempdir=/mnt/NVME3/
+tempdir2=/mnt/ram/
 pool= #Do not use with pool_contract_puzzle_hash
 farm=
 pool_contract_puzzle_hash=
 tmptoggle=false
 rmulti2=1
 log=/home/chia/chialogs
-dest1=/media/plots-02
-dest2=/media/plots-03
-mergerfschiapool=/media/chia
+# Not using as leaving plot on ${tempdir}
+dest1=/mnt/D1
+dest2=/mnt/D2
+dest3=/mnt/D3
+dest4=/mnt/D4
+dest5=/mnt/D5
+dest6=/mnt/D6
+dest7=/mnt/D7
+dest8=/mnt/D8
+dest9=/mnt/D9
+dest10=/mnt/D10
+mergerfschiapool=
+#########################################
+# However, leaving in to check the space for those that want to set the loop to a high number
+# and exit when destination(s) filled.
 declare -a final_dest=(
                        "${dest1}"
                        "${dest2}"
-                       #"${mergerfschiapool}"
-                      )
+                       "${dest3}"
+                       "${dest4}"
+                       "${dest5}"
+                       "${dest6}"
+                       "${dest7}"
+                       "${dest8}"
+                       "${dest9}"
+                       "${dest10}"
 max=95%
-farm_folder=farm/ # disk_space check only works with mount points.
+farm_folder=/ # disk_space check only works with mount points.
 Discord=false
 url=(Your web hook here)
 
@@ -77,6 +95,8 @@ do
    disk_space ${dt} ${i}
    if [[ -z $dest ]]; then
      echo "No drive space found on ${HOSTNAME} for final destination!" |tee -a ${log}/${dt}_plot-${i}.log;
+     message="No space on ${HOSTNAME}'s drives."
+     discord_message ${message}
      exit
    fi
 
