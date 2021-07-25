@@ -2,7 +2,7 @@
 SOURCE_DIR=/mnt/NVME3
 Discord=false
 url="https://discord.com/api/webhooks/yourhook"
-plot=$(find ${SOURCE_DIR} -type f -name "*.plot")
+plot=$(find ${SOURCE_DIR}/*.plot ${SOURCE_DIR}/lost+found -prune)
 dest1=/mnt/D1
 dest2=/mnt/D2
 dest3=/mnt/D3
@@ -13,6 +13,7 @@ dest7=/mnt/D7
 dest8=/mnt/D8
 dest9=/mnt/D9
 dest10=/mnt/D10
+dest11=/mnt/"Chia\x20Plot\x201"
 mergerfschiapool=
 declare -a final_dest=(
                        "${dest1}"
@@ -30,12 +31,13 @@ declare -a final_dest=(
 # If your final location for farming is not the root of the drive, put folder with trailing slash
 # here. Example: farm/. Does need trailing slash. If no directory, leave the blank.
 farm_folder=
+max=95%
 ###### Section for settings to removing existing sole plots based on time stamp
 remove_solo_plots=false
 ###### Set this to the number of days in the past to collect the list of plots.
 ###### Example, last solo plot was 16 days ago and now pool plots are generated. The +15 will
 ###### grab the files dated 15 days from the run time of this move. This list is now set and will
-###### not collect again unless the file delete-old-plots.log is renamed or deleted.
+###### not collect again unless the file delete-old-plots-${folder}.log is renamed or deleted.
 days_to_collect_list=+15
 
 discord_message () {
@@ -82,11 +84,12 @@ if [[ -z $dest ]]; then
 fi
 
 if [ "${remove_solo_plots}" = true ]; then
-  if [ -e delete-old-plots-${dest}.log ]; then
+  folder=$(echo ${dest} | sed 's/\(.*\)\/\(.*\)\/\(.*\)$/\2/')
+  if [ -e delete-old-plots-${folder}.log ]; then
     break
   else
-    folder=$(echo ${dest} | sed 's/\(.*\)\/\(.*\)\/\(.*\)$/\2/')
-    find ${dest} -name "*.plot" -type f -mtime ${days_to_collect_list} > delete-old-plots-${folder}.log
+    echo "Finding plots order than ${days_to_collect_list}."
+    find ${dest}*.plot "${dest}lost+found" -prune -type f -mtime ${days_to_collect_list} > delete-old-plots-${folder}.log
     # Make a list that will not change as this process runs
     cp delete-old-plots-${folder}.log master-list-${folder}.log
     if [ "${Discord}" = true ]; then
@@ -118,12 +121,13 @@ if [[ ( -n $plot ) ]]; then
       message="Moving ${eachplot} on ${HOSTNAME} to farm. Started $(date '+%Y-%m-%d_%H:%M:%S')."
       discord_message $message
     fi
-    #mv ${eachplot} ${dest} #${DESTINATION_DIR}
+    #mv ${eachplot} ${dest} #${dest}
     rsync --remove-source-files --progress --partial --human-readable ${eachplot} ${dest}
     # Remove a solo plot now the pool plot copied, if applicable.
     if [ "${remove_solo_plots}" = true ]; then
-      read -r line < delete-old-plots-${dest}.log
-      #or: line=$(sed -n '1p' delete-old-plots-${dest}.log)
+      read -r line < delete-old-plots-${folder}.log
+      #or: line=$(sed -n '1p' delete-old-plots-${folder}.log)
+      echo "Removing old plot: ${line}."
       rm -f ${line}
       if [ "${Discord}" = true ]; then
         message="Removed solo plot ${line} on ${HOSTNAME}."
@@ -147,3 +151,5 @@ fi
 #UNSET section
 unset folder
 unset message
+unset plot
+unset plots
